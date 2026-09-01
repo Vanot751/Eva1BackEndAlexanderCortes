@@ -2,6 +2,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Producto
 from .forms import ProductoForm
 
+from django.views.decorators.csrf import csrf_protect
+
+
 # Create your views here.
 
 
@@ -18,6 +21,7 @@ def producto_detail(request, pk):
 
 
 # CREATE
+@csrf_protect
 def producto_create(request):
     if request.method == 'POST':
         form = ProductoForm(request.POST)
@@ -30,6 +34,7 @@ def producto_create(request):
 
 
 # UPDATE
+@csrf_protect
 def producto_update(request, pk):
     producto = get_object_or_404(Producto, pk=pk)
     
@@ -46,6 +51,7 @@ def producto_update(request, pk):
 
 
 # DELETE
+@csrf_protect
 def producto_delete(request, pk):
     producto = get_object_or_404(Producto, pk=pk)
     
