@@ -5,7 +5,7 @@
 {% block eyebrow %}Punto de venta{% endblock %}
 {% block content %}
 {% comment %}El formulario separa datos del comprador y líneas de productos; venta_create aplica la lógica y guarda la operación.{% endcomment %}
-<div class="mb-8"><p class="text-sm text-slate-500">Registra el pedido, descuenta stock y deja la boleta lista.</p><h2 class="mt-2 font-display text-4xl text-ink">Una venta, bien hecha.</h2></div>
+<div class="mb-8"><p class="text-sm text-slate-600">Registra el pedido, descuenta stock y deja la boleta lista.</p><h2 class="mt-2 font-display text-3xl leading-tight text-ink sm:text-4xl">Una venta, bien hecha.</h2></div>
 <form method="post" class="grid gap-6 lg:grid-cols-[1fr_1.25fr]">
     {% csrf_token %}
     {{ form.non_field_errors }}
@@ -19,14 +19,17 @@
             <div>{{ form.telefono.label_tag }}{{ form.telefono }}{{ form.telefono.errors }}</div>
         </div>
     </fieldset>
-    <fieldset class="rounded-3xl bg-ink p-6 text-white shadow-sm sm:p-8">
-        {% comment %}Las tres parejas producto/cantidad corresponden a los campos definidos en VentaForm.{% endcomment %}
-        <legend class="mb-2 font-display text-2xl">Productos de la venta</legend><p class="mb-6 text-sm text-slate-300">Puedes agregar hasta tres productos por operación.</p>
-        {% for index in '123'|make_list %}
-            {% with producto_field='producto_'|add:index cantidad_field='cantidad_'|add:index %}
-                <div class="mb-4 grid grid-cols-[1fr_7rem] items-end gap-3 rounded-2xl border border-white/10 bg-white/5 p-4">{% for field in form.visible_fields %}{% if field.name == producto_field or field.name == cantidad_field %}<div>{{ field.label_tag }}{{ field }}{{ field.errors }}</div>{% endif %}{% endfor %}</div>
-            {% endwith %}
+    <fieldset class="venta-panel rounded-3xl bg-ink p-6 text-white shadow-sm sm:p-8">
+        <legend class="mb-2 w-full max-w-full break-words font-display text-xl text-white sm:text-2xl">Productos de la venta</legend><p class="mb-6 text-sm leading-6 text-slate-200">Agrega todos los productos que necesites en esta operación.</p>
+        <div id="lineas-productos">
+        {% for linea in form.lineas %}
+            <div class="producto-linea mb-4 grid min-w-0 grid-cols-1 items-end gap-3 rounded-2xl border border-white/15 bg-white/10 p-4 sm:grid-cols-[minmax(0,1fr)_7rem]" data-index="{{ linea.index }}">
+                <div class="min-w-0">{{ linea.producto.label_tag }}{{ linea.producto }}{{ linea.producto.errors }}</div>
+                <div class="min-w-0">{{ linea.cantidad.label_tag }}{{ linea.cantidad }}{{ linea.cantidad.errors }}</div>
+            </div>
         {% endfor %}
+        </div>
+        <button type="button" id="agregar-producto" class="mb-2 rounded-xl border border-lime/70 px-4 py-2 text-sm font-bold text-lime transition hover:bg-lime hover:text-ink">+ Agregar otro producto</button>
         <button type="submit" class="mt-3 w-full rounded-xl bg-lime px-6 py-3.5 text-sm font-bold text-ink transition hover:bg-white">Registrar venta →</button>
     </fieldset>
 </form>
@@ -39,5 +42,26 @@
     }
     habitual.addEventListener('change', actualizarDatosCliente);
     actualizarDatosCliente();
+
+    const lineasProductos = document.getElementById('lineas-productos');
+    const agregarProducto = document.getElementById('agregar-producto');
+    agregarProducto.addEventListener('click', () => {
+        const ultimaLinea = lineasProductos.lastElementChild;
+        const nuevoIndice = Number(ultimaLinea.dataset.index) + 1;
+        const nuevaLinea = ultimaLinea.cloneNode(true);
+        nuevaLinea.dataset.index = nuevoIndice;
+        nuevaLinea.querySelectorAll('label, select, input').forEach((elemento) => {
+            if (elemento.tagName === 'LABEL') {
+                elemento.htmlFor = elemento.htmlFor.replace(/_\d+$/, `_${nuevoIndice}`);
+            } else {
+                elemento.name = elemento.name.replace(/_\d+$/, `_${nuevoIndice}`);
+                elemento.id = elemento.id.replace(/_\d+$/, `_${nuevoIndice}`);
+                if (elemento.tagName === 'SELECT') elemento.selectedIndex = 0;
+                if (elemento.tagName === 'INPUT') elemento.value = '';
+            }
+        });
+        nuevaLinea.querySelectorAll('.errorlist').forEach((error) => error.remove());
+        lineasProductos.appendChild(nuevaLinea);
+    });
 </script>
 {% endblock %}

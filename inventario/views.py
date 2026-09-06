@@ -133,9 +133,9 @@ def venta_create(request):
                 # El RUT ocasional queda en la boleta, no crea un cliente persistente.
                 cliente = Cliente.objects.filter(rut=rut, es_habitual=True).first()
             
-            # Recorre las tres líneas posibles y conserva solo las completas.
             items = []
-            for i in range(1, 4):
+            for linea in form.lineas:
+                i = linea['index']
                 prod = form.cleaned_data.get(f'producto_{i}')
                 cant = form.cleaned_data.get(f'cantidad_{i}')
                 if prod and cant:

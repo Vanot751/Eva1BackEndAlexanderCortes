@@ -10,6 +10,9 @@ class Producto(models.Model):
     descripcion = models.CharField(max_length=500, null=True, blank=True)
     stock =  models.IntegerField(default=0)
 
+    def __str__(self):
+        return f'{self.nombre} ({self.codigo})'
+
 class Cliente(models.Model):
     # Un cliente puede ser habitual o quedar sin registro cuando solo compra con RUT.
     rut = models.CharField(max_length=12, unique=True)
