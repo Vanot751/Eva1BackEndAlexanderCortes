@@ -1,18 +1,28 @@
-<!-- inventario/templates/inventario/base.html -->
-<!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Inventario{% endblock %}</title>
-  </head>
-  <body>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Mi Tienda{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <header>{% block header %}Mi Tienda{% endblock %}</header>
     <nav>
-      <a href="{% url 'producto_list' %}">Productos</a>
-      <a href="{% url 'producto_create' %}">Nuevo</a>
+        <a href="{% url 'producto_list' %}">Productos</a>
+        <a href="{% url 'producto_create' %}">Nuevo producto</a>
+        <a href="{% url 'cliente_list' %}">Clientes</a>
+        <a href="{% url 'venta_list' %}">Ventas</a>
+        <a href="{% url 'venta_create' %}">Registrar venta</a>
     </nav>
     <main>
-      {% block content %}{% endblock %}
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {% block content %}{% endblock %}
     </main>
-  </body>
+</body>
 </html>

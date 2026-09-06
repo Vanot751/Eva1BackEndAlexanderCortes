@@ -1,0 +1,13 @@
+{% extends 'inventario/base.html' %}
+{% block title %}Clientes{% endblock %}
+{% block content %}
+<h1>Clientes habituales</h1>
+<a href="{% url 'cliente_create' %}">Registrar cliente</a>
+<ul>
+    {% for cliente in clientes %}
+        <li>{{ cliente.rut }} - {{ cliente.nombre }}{% if cliente.es_habitual %} (habitual){% endif %}</li>
+    {% empty %}
+        <li>No hay clientes registrados.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

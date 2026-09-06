@@ -1,0 +1,42 @@
+{% extends 'inventario/base.html' %}
+
+{% block title %}Registrar venta{% endblock %}
+{% block content %}
+<h1>Registrar venta</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <fieldset>
+        <legend>Cliente</legend>
+        {{ form.cliente_rut.label_tag }} {{ form.cliente_rut }} {{ form.cliente_rut.errors }}
+        <p>{{ form.es_habitual }} {{ form.es_habitual.label_tag }}</p>
+        <div id="datos_habitual">
+            <p>{{ form.nombre.label_tag }} {{ form.nombre }} {{ form.nombre.errors }}</p>
+            <p>{{ form.correo.label_tag }} {{ form.correo }} {{ form.correo.errors }}</p>
+            <p>{{ form.telefono.label_tag }} {{ form.telefono }} {{ form.telefono.errors }}</p>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>Productos</legend>
+        {% for index in '123'|make_list %}
+            {% with producto_field='producto_'|add:index cantidad_field='cantidad_'|add:index %}
+                {% for field in form.visible_fields %}
+                    {% if field.name == producto_field or field.name == cantidad_field %}
+                        <p>{{ field.label_tag }} {{ field }} {{ field.errors }}</p>
+                    {% endif %}
+                {% endfor %}
+            {% endwith %}
+        {% endfor %}
+    </fieldset>
+    <button type="submit">Registrar venta</button>
+</form>
+<script>
+    const habitual = document.getElementById('id_es_habitual');
+    const datosHabitual = document.getElementById('datos_habitual');
+    function actualizarDatosCliente() {
+        datosHabitual.hidden = !habitual.checked;
+    }
+    habitual.addEventListener('change', actualizarDatosCliente);
+    actualizarDatosCliente();
+</script>
+{% endblock %}

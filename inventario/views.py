@@ -1,9 +1,13 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Producto
 from .forms import ProductoForm
-
 from django.views.decorators.csrf import csrf_protect
 
+from django.contrib import messages
+from .forms import ClienteForm, VentaForm
+from .models import Cliente, Venta, DetalleVenta
+from django.db import transaction
+import re
 
 # Create your views here.
 
@@ -30,7 +34,7 @@ def producto_create(request):
             return redirect('producto_list')
     else:
         form = ProductoForm()
-        return render(request, 'inventario/producto_form.html', {'form': form})
+    return render(request, 'inventario/producto_form.html', {'form': form})
 
 
 # UPDATE
@@ -47,7 +51,7 @@ def producto_update(request, pk):
         
     else:
         form = ProductoForm(instance=producto)
-        return render(request, 'inventario/producto_form.html', {'form': form})
+    return render(request, 'inventario/producto_form.html', {'form': form})
 
 
 # DELETE
@@ -62,3 +66,132 @@ def producto_delete(request, pk):
     return render(
         request, 'inventario/producto_confirm_delete.html', {'object': producto}
     )
+
+# ========== CLIENTES ==========
+def cliente_list(request):
+    clientes = Cliente.objects.all()
+    return render(request, 'inventario/cliente_list.html', {'clientes': clientes})
+
+@csrf_protect
+def cliente_create(request):
+    if request.method == 'POST':
+        form = ClienteForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Cliente creado correctamente.')
+            return redirect('cliente_list')
+    else:
+        form = ClienteForm()
+    return render(request, 'inventario/cliente_form.html', {'form': form})
+
+# ========== VENTAS ==========
+@csrf_protect
+def venta_create(request):
+    productos = Producto.objects.all()
+    
+    if request.method == 'POST':
+        form = VentaForm(request.POST)
+        if form.is_valid():
+            rut = form.cleaned_data['cliente_rut']
+            es_habitual = form.cleaned_data['es_habitual']
+            
+            # --- VALIDACIÓN DE RUT (estructura de decisión) ---
+            if not validar_rut(rut):
+                messages.error(request, 'RUT inválido. Debe tener formato 12345678-9 o 123456789.')
+                return render(request, 'inventario/venta_form.html', {'form': form, 'productos': productos})
+            
+            # --- GESTIÓN DEL CLIENTE (estructura de decisión) ---
+            if es_habitual:
+                nombre = form.cleaned_data.get('nombre')
+                correo = form.cleaned_data.get('correo')
+                telefono = form.cleaned_data.get('telefono')
+                if not nombre or not correo or not telefono:
+                    messages.error(request, 'Para clientes habituales debe completar nombre, correo y teléfono.')
+                    return render(request, 'inventario/venta_form.html', {'form': form, 'productos': productos})
+                cliente, created = Cliente.objects.get_or_create(
+                    rut=rut,
+                    defaults={'nombre': nombre, 'correo': correo, 'telefono': telefono, 'es_habitual': True}
+                )
+                if not created:
+                    # actualizar datos por si cambiaron
+                    cliente.nombre = nombre
+                    cliente.correo = correo
+                    cliente.telefono = telefono
+                    cliente.es_habitual = True
+                    cliente.save()
+            else:
+                # El RUT ocasional queda en la boleta, no crea un cliente persistente.
+                cliente = Cliente.objects.filter(rut=rut, es_habitual=True).first()
+            
+            # --- PROCESAR PRODUCTOS (estructura de decisión y bucle) ---
+            # Recoger productos y cantidades del formulario
+            items = []
+            for i in range(1, 4):
+                prod = form.cleaned_data.get(f'producto_{i}')
+                cant = form.cleaned_data.get(f'cantidad_{i}')
+                if prod and cant:
+                    items.append((prod, cant))
+            
+            if not items:
+                messages.error(request, 'Debe seleccionar al menos un producto con cantidad.')
+                return render(request, 'inventario/venta_form.html', {'form': form, 'productos': productos})
+            
+            # Verificar stock y calcular total
+            total = 0
+            detalles = []
+            with transaction.atomic():
+                for producto, cantidad in items:
+                    if producto.stock < cantidad:
+                        messages.error(request, f'Stock insuficiente para {producto.nombre}. Disponible: {producto.stock}')
+                        return render(request, 'inventario/venta_form.html', {'form': form, 'productos': productos})
+                    # Descontar stock
+                    producto.stock -= cantidad
+                    producto.save()
+                    # Preparar detalle
+                    detalles.append({
+                        'producto': producto,
+                        'cantidad': cantidad,
+                        'precio_unitario': producto.precio,
+                        'subtotal': cantidad * producto.precio
+                    })
+                    total += cantidad * producto.precio
+                
+                # Crear la venta
+                venta = Venta.objects.create(cliente=cliente, rut_cliente=rut, total=total)
+                
+                # Crear detalles
+                for det in detalles:
+                    DetalleVenta.objects.create(
+                        venta=venta,
+                        producto=det['producto'],
+                        cantidad=det['cantidad'],
+                        precio_unitario=det['precio_unitario']
+                    )
+            
+            messages.success(request, f'Venta #{venta.id} registrada con éxito. Total: ${total}')
+            return redirect('venta_list')
+    
+    else:
+        form = VentaForm()
+    
+    return render(request, 'inventario/venta_form.html', {'form': form, 'productos': productos})
+
+
+def validar_rut(rut):
+    rut_limpio = rut.replace('.', '').replace('-', '').strip().upper()
+    if not re.fullmatch(r'\d{7,8}[0-9K]', rut_limpio):
+        return False
+
+    cuerpo, digito = rut_limpio[:-1], rut_limpio[-1]
+    suma = 0
+    multiplicador = 2
+    for numero in reversed(cuerpo):
+        suma += int(numero) * multiplicador
+        multiplicador = 2 if multiplicador == 7 else multiplicador + 1
+    resto = 11 - (suma % 11)
+    esperado = '0' if resto == 11 else 'K' if resto == 10 else str(resto)
+    return digito == esperado
+
+def venta_list(request):
+    ventas = Venta.objects.all().order_by('-fecha')
+    return render(request, 'inventario/venta_list.html', {'ventas': ventas})

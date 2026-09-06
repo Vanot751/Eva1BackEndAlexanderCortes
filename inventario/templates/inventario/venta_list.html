@@ -1,0 +1,21 @@
+{% extends 'inventario/base.html' %}
+{% block title %}Ventas{% endblock %}
+{% block content %}
+<h1>Ventas registradas</h1>
+<a href="{% url 'venta_create' %}">Registrar venta</a>
+<ul>
+    {% for venta in ventas %}
+        <li>
+            Venta #{{ venta.id }} - {{ venta.fecha|date:'d/m/Y H:i' }} -
+            RUT: {{ venta.rut_cliente }} - Total: ${{ venta.total }}
+            <ul>
+                {% for detalle in venta.detalles.all %}
+                    <li>{{ detalle.producto.nombre }} x {{ detalle.cantidad }} (${{ detalle.precio_unitario }})</li>
+                {% endfor %}
+            </ul>
+        </li>
+    {% empty %}
+        <li>No hay ventas registradas.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

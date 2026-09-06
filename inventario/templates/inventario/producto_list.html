@@ -1,12 +1,13 @@
 <!-- inventario/templates/inventario/producto_list.html -->
 {% extends 'inventario/base.html' %}
-{% block title %}Listado{% endblock %}
+{% block title %}Productos{% endblock %}
 {% block content %}
 <h1>Productos</h1>
+<a href="{% url 'producto_create' %}">Registrar producto</a>
 <ul>
   {% for p in object_list %}
     <li>
-      <a href="{% url 'producto_detail' p.pk %}">{{ p.nombre }}</a>
+      <a href="{% url 'producto_detail' p.pk %}">{{ p.codigo }} - {{ p.nombre }}</a>
       — ${{ p.precio }} — stock: {{ p.stock }}
       [<a href="{% url 'producto_update' p.pk %}">Editar</a>]
       [<a href="{% url 'producto_delete' p.pk %}">Eliminar</a>]

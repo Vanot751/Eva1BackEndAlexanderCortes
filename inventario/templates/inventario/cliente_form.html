@@ -1,0 +1,10 @@
+{% extends 'inventario/base.html' %}
+{% block title %}Nuevo cliente{% endblock %}
+{% block content %}
+<h1>Registrar cliente habitual</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Guardar cliente</button>
+</form>
+{% endblock %}
