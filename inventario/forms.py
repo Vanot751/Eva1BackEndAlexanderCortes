@@ -5,6 +5,13 @@ class ProductoForm(forms.ModelForm):
     class Meta:
         model = Producto
         fields = ['codigo', 'nombre', 'precio', 'descripcion', 'stock']
+        labels = {
+            'codigo': 'Código',
+            'nombre': 'Nombre del producto',
+            'precio': 'Precio de venta',
+            'descripcion': 'Descripción',
+            'stock': 'Stock inicial',
+        }
         widgets = {
             'precio': forms.NumberInput(attrs={'min': 0, 'step': '0.01'}),
             'stock': forms.NumberInput(attrs={'min': 0}),
@@ -14,6 +21,13 @@ class ClienteForm(forms.ModelForm):
     class Meta:
         model = Cliente
         fields = ['rut', 'nombre', 'correo', 'telefono', 'es_habitual']
+        labels = {
+            'rut': 'RUT',
+            'nombre': 'Nombre completo',
+            'correo': 'Correo electrónico',
+            'telefono': 'Teléfono',
+            'es_habitual': 'Cliente habitual',
+        }
 
 class VentaForm(forms.Form):
     cliente_rut = forms.CharField(max_length=12, label='RUT del cliente')

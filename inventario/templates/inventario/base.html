@@ -1,28 +1,90 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Mi Tienda{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ink: '#17211b',
+                        moss: '#1e5d4b',
+                        lime: '#d9f99d',
+                        paper: '#f6f7f2',
+                        amber: '#e6a23c'
+                    },
+                    fontFamily: {
+                        display: ['Georgia', 'serif'],
+                        sans: ['Trebuchet MS', 'Arial', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background: #f6f7f2; color: #17211b; }
+        input, select, textarea { width: 100%; border: 1px solid #d7ded5; border-radius: .75rem; background: #fff; padding: .7rem .85rem; color: #17211b; outline: none; transition: border-color .2s, box-shadow .2s; }
+        input:focus, select:focus, textarea:focus { border-color: #1e5d4b; box-shadow: 0 0 0 3px rgba(30, 93, 75, .12); }
+        input[type="checkbox"] { width: auto; accent-color: #1e5d4b; }
+        label { display: block; margin-bottom: .35rem; color: #526158; font-size: .85rem; font-weight: 700; }
+        ul.errorlist { margin: .35rem 0; color: #b42318; font-size: .8rem; list-style: none; padding: 0; }
+    </style>
 </head>
-<body>
-    <header>{% block header %}Mi Tienda{% endblock %}</header>
-    <nav>
-        <a href="{% url 'producto_list' %}">Productos</a>
-        <a href="{% url 'producto_create' %}">Nuevo producto</a>
-        <a href="{% url 'cliente_list' %}">Clientes</a>
-        <a href="{% url 'venta_list' %}">Ventas</a>
-        <a href="{% url 'venta_create' %}">Registrar venta</a>
-    </nav>
-    <main>
+<body class="min-h-screen font-sans">
+    <div class="min-h-screen lg:flex">
+        <aside class="flex w-full flex-col bg-ink px-5 py-5 text-white lg:min-h-screen lg:w-72 lg:px-7 lg:py-8">
+            <div class="flex items-center justify-between lg:block">
+                <a href="{% url 'producto_list' %}" class="flex items-center gap-3">
+                    <span class="grid h-11 w-11 place-items-center rounded-2xl bg-lime text-xl font-bold text-ink">M</span>
+                    <span>
+                        <span class="block font-display text-2xl leading-none">Mercado Menta</span>
+                        <span class="mt-1 block text-xs uppercase tracking-[.22em] text-slate-300">control de venta</span>
+                    </span>
+                </a>
+                <span class="hidden rounded-full border border-white/15 px-3 py-1 text-xs text-slate-300 lg:mt-10 lg:inline-block">Panel operativo</span>
+            </div>
+            <nav class="mt-6 grid grid-cols-2 gap-2 text-sm lg:mt-14 lg:block lg:space-y-2">
+                <a href="{% url 'producto_list' %}" class="group flex items-center gap-3 rounded-xl px-3 py-3 text-slate-300 transition hover:bg-white/10 hover:text-white">
+                    <span class="grid h-7 w-7 place-items-center rounded-lg bg-white/10 text-xs">01</span> Inventario
+                </a>
+                <a href="{% url 'venta_create' %}" class="group flex items-center gap-3 rounded-xl bg-lime px-3 py-3 font-bold text-ink transition hover:bg-white">
+                    <span class="grid h-7 w-7 place-items-center rounded-lg bg-ink/10 text-xs">02</span> Nueva venta
+                </a>
+                <a href="{% url 'venta_list' %}" class="group flex items-center gap-3 rounded-xl px-3 py-3 text-slate-300 transition hover:bg-white/10 hover:text-white">
+                    <span class="grid h-7 w-7 place-items-center rounded-lg bg-white/10 text-xs">03</span> Historial
+                </a>
+                <a href="{% url 'cliente_list' %}" class="group flex items-center gap-3 rounded-xl px-3 py-3 text-slate-300 transition hover:bg-white/10 hover:text-white">
+                    <span class="grid h-7 w-7 place-items-center rounded-lg bg-white/10 text-xs">04</span> Clientes
+                </a>
+            </nav>
+            <div class="mt-auto hidden rounded-2xl border border-white/10 bg-white/5 p-4 lg:block">
+                <p class="text-xs uppercase tracking-[.18em] text-lime">Turno de hoy</p>
+                <p class="mt-2 font-display text-lg">Todo bajo control.</p>
+                <p class="mt-1 text-xs leading-5 text-slate-400">Registra cada movimiento y mantén tu stock al día.</p>
+            </div>
+        </aside>
+        <div class="min-w-0 flex-1">
+            <header class="flex items-center justify-between border-b border-slate-200 bg-white/80 px-5 py-4 backdrop-blur lg:px-10">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-[.18em] text-moss">{% block eyebrow %}Operaciones{% endblock %}</p>
+                    <h1 class="mt-1 font-display text-2xl text-ink">{% block header %}Mi Tienda{% endblock %}</h1>
+                </div>
+                <a href="{% url 'producto_create' %}" class="hidden rounded-xl bg-ink px-4 py-2.5 text-sm font-bold text-white transition hover:bg-moss sm:inline-flex">+ Producto</a>
+            </header>
+            <main class="mx-auto max-w-7xl px-5 py-7 lg:px-10 lg:py-10">
         {% if messages %}
-            <ul>
+            <ul class="mb-6 space-y-2">
                 {% for message in messages %}
-                    <li>{{ message }}</li>
+                    <li class="rounded-xl border border-moss/20 bg-moss/10 px-4 py-3 text-sm font-semibold text-moss">{{ message }}</li>
                 {% endfor %}
             </ul>
         {% endif %}
         {% block content %}{% endblock %}
-    </main>
+            </main>
+        </div>
+    </div>
 </body>
 </html>

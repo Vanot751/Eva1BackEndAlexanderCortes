@@ -1,11 +1,16 @@
 {% extends 'inventario/base.html' %}
 
-{% block title %}{% if form.instance.pk %}Editar producto{% else %}Nuevo producto{% endif %}{% endblock %}
+{% block title %}{% if form.instance.pk %}Editar producto{% else %}Nuevo producto{% endif %} | Mercado Menta{% endblock %}
+{% block header %}{% if form.instance.pk %}Editar producto{% else %}Nuevo producto{% endif %}{% endblock %}
+{% block eyebrow %}Catálogo{% endblock %}
 {% block content %}
-<h1>{% if form.instance.pk %}Editar producto{% else %}Nuevo producto{% endif %}</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Guardar producto</button>
-</form>
+<div class="mx-auto max-w-3xl">
+    <div class="mb-8"><p class="text-sm text-slate-500">Completa los datos para mantener el catálogo preciso.</p><h2 class="mt-2 font-display text-4xl text-ink">{% if form.instance.pk %}Ajusta este producto.{% else %}Suma algo nuevo al estante.{% endif %}</h2></div>
+    <form method="post" class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200/70 sm:p-9">
+        {% csrf_token %}
+        {% if form.non_field_errors %}<div class="mb-5 rounded-xl bg-red-50 p-4 text-sm text-red-700">{{ form.non_field_errors }}</div>{% endif %}
+        <div class="grid gap-5 sm:grid-cols-2">{% for field in form %}<div class="{% if field.name == 'descripcion' %}sm:col-span-2{% endif %}">{{ field.label_tag }}{{ field }}{{ field.errors }}</div>{% endfor %}</div>
+        <div class="mt-8 flex flex-col-reverse gap-3 border-t border-slate-100 pt-6 sm:flex-row sm:justify-end"><a href="{% url 'producto_list' %}" class="rounded-xl px-5 py-3 text-center text-sm font-bold text-slate-500 hover:bg-slate-50">Cancelar</a><button type="submit" class="rounded-xl bg-moss px-6 py-3 text-sm font-bold text-white shadow-lg shadow-moss/15 hover:bg-ink">Guardar producto</button></div>
+    </form>
+</div>
 {% endblock %}

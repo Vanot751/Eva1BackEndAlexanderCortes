@@ -1,10 +1,11 @@
-<!-- inventario/templates/inventario/producto_detail.html -->
 {% extends 'inventario/base.html' %}
+{% block title %}{{ object.nombre }} | Mercado Menta{% endblock %}
+{% block header %}Detalle de producto{% endblock %}
+{% block eyebrow %}Inventario{% endblock %}
 {% block content %}
-<h1>{{ object.nombre }}</h1>
-<p>Código: {{ object.codigo }}</p>
-<p>Precio: ${{ object.precio }}</p>
-<p>{{ object.descripcion }}</p>
-<p>Stock: {{ object.stock }}</p>
-<a href="{% url 'producto_update' object.pk %}">Editar</a>
+<a href="{% url 'producto_list' %}" class="mb-6 inline-block text-sm font-bold text-moss hover:text-ink">← Volver al inventario</a>
+<section class="grid gap-6 lg:grid-cols-[1.4fr_.8fr]">
+	<div class="rounded-3xl bg-ink p-7 text-white sm:p-10"><span class="rounded-full bg-lime px-3 py-1 text-xs font-bold uppercase tracking-widest text-ink">Producto activo</span><h2 class="mt-8 font-display text-5xl leading-tight">{{ object.nombre }}</h2><p class="mt-4 max-w-xl leading-7 text-slate-300">{{ object.descripcion|default:'Sin descripción registrada para este producto.' }}</p><div class="mt-10 flex flex-wrap gap-3"><a href="{% url 'producto_update' object.pk %}" class="rounded-xl bg-lime px-5 py-3 text-sm font-bold text-ink hover:bg-white">Editar producto</a><a href="{% url 'producto_delete' object.pk %}" class="rounded-xl border border-white/20 px-5 py-3 text-sm font-bold text-white hover:bg-white/10">Eliminar</a></div></div>
+	<div class="rounded-3xl bg-white p-7 shadow-sm ring-1 ring-slate-200/70 sm:p-8"><p class="text-xs font-bold uppercase tracking-[.15em] text-slate-400">Ficha rápida</p><dl class="mt-7 space-y-6"><div><dt class="text-sm text-slate-500">Código</dt><dd class="mt-1 font-mono text-lg font-bold text-ink">{{ object.codigo }}</dd></div><div><dt class="text-sm text-slate-500">Precio de venta</dt><dd class="mt-1 font-display text-4xl text-moss">${{ object.precio }}</dd></div><div><dt class="text-sm text-slate-500">Stock disponible</dt><dd class="mt-1 text-3xl font-bold {% if object.stock < 5 %}text-amber-700{% else %}text-ink{% endif %}">{{ object.stock }} <span class="text-sm font-normal text-slate-500">unidades</span></dd></div></dl></div>
+</section>
 {% endblock %}
