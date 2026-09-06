@@ -4,6 +4,7 @@
 {% block header %}Nueva venta{% endblock %}
 {% block eyebrow %}Punto de venta{% endblock %}
 {% block content %}
+{% comment %}El formulario separa datos del comprador y líneas de productos; venta_create aplica la lógica y guarda la operación.{% endcomment %}
 <div class="mb-8"><p class="text-sm text-slate-500">Registra el pedido, descuenta stock y deja la boleta lista.</p><h2 class="mt-2 font-display text-4xl text-ink">Una venta, bien hecha.</h2></div>
 <form method="post" class="grid gap-6 lg:grid-cols-[1fr_1.25fr]">
     {% csrf_token %}
@@ -19,6 +20,7 @@
         </div>
     </fieldset>
     <fieldset class="rounded-3xl bg-ink p-6 text-white shadow-sm sm:p-8">
+        {% comment %}Las tres parejas producto/cantidad corresponden a los campos definidos en VentaForm.{% endcomment %}
         <legend class="mb-2 font-display text-2xl">Productos de la venta</legend><p class="mb-6 text-sm text-slate-300">Puedes agregar hasta tres productos por operación.</p>
         {% for index in '123'|make_list %}
             {% with producto_field='producto_'|add:index cantidad_field='cantidad_'|add:index %}
@@ -29,6 +31,7 @@
     </fieldset>
 </form>
 <script>
+    // Los datos adicionales solo son visibles cuando el comprador elige ser habitual.
     const habitual = document.getElementById('id_es_habitual');
     const datosHabitual = document.getElementById('datos_habitual');
     function actualizarDatosCliente() {

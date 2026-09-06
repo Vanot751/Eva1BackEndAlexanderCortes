@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+# El proyecto delega las rutas de negocio a inventario y conserva /admin/ para Django.
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('inventario.urls'))

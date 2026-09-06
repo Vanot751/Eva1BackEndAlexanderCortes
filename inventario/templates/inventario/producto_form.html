@@ -4,6 +4,7 @@
 {% block header %}{% if form.instance.pk %}Editar producto{% else %}Nuevo producto{% endif %}{% endblock %}
 {% block eyebrow %}Catálogo{% endblock %}
 {% block content %}
+{% comment %}El mismo formulario sirve para crear o actualizar: form.instance.pk distingue ambos estados.{% endcomment %}
 <div class="mx-auto max-w-3xl">
     <div class="mb-8"><p class="text-sm text-slate-500">Completa los datos para mantener el catálogo preciso.</p><h2 class="mt-2 font-display text-4xl text-ink">{% if form.instance.pk %}Ajusta este producto.{% else %}Suma algo nuevo al estante.{% endif %}</h2></div>
     <form method="post" class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200/70 sm:p-9">

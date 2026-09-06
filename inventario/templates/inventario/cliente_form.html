@@ -3,6 +3,7 @@
 {% block header %}Nuevo cliente habitual{% endblock %}
 {% block eyebrow %}Relación con clientes{% endblock %}
 {% block content %}
+{% comment %}ClienteForm genera los campos, errores y valores necesarios para registrar un habitual.{% endcomment %}
 <div class="mx-auto max-w-3xl"><div class="mb-8"><p class="text-sm text-slate-500">Guarda estos datos para agilizar sus próximas compras.</p><h2 class="mt-2 font-display text-4xl text-ink">Una relación que crece.</h2></div><form method="post" class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200/70 sm:p-9">
     {% csrf_token %}
     <div class="grid gap-5 sm:grid-cols-2">{% for field in form %}<div class="{% if field.name == 'es_habitual' %}flex items-center gap-3 sm:col-span-2{% endif %}">{{ field }}{{ field.label_tag }}{{ field.errors }}</div>{% endfor %}</div>

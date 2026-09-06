@@ -3,6 +3,7 @@
 {% block header %}Historial de ventas{% endblock %}
 {% block eyebrow %}Punto de venta{% endblock %}
 {% block content %}
+{% comment %}El historial recibe ventas ordenadas desde venta_list y muestra RUT, total y detalles relacionados.{% endcomment %}
 <section class="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-end"><div><p class="mb-2 text-sm text-slate-500">Una vista clara de cada operación</p><h2 class="font-display text-4xl text-ink">Lo que se ha vendido.</h2></div><a href="{% url 'venta_create' %}" class="inline-flex justify-center rounded-xl bg-moss px-5 py-3 text-sm font-bold text-white hover:bg-ink">+ Nueva venta</a></section>
 <section class="space-y-4">
     {% for venta in ventas %}

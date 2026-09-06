@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views
 
+# Estas rutas asignan cada URL pública a una vista y le dan un nombre reutilizable
+# por las redirecciones y los enlaces de las plantillas.
 urlpatterns = [
     # Productos
     path('productos/', views.producto_list, name='producto_list'),

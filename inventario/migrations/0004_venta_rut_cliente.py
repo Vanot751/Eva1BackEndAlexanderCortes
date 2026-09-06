@@ -2,6 +2,7 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    # Conserva en cada venta el RUT usado para la boleta, incluso sin cliente habitual.
     dependencies = [
         ('inventario', '0003_producto_codigo'),
     ]

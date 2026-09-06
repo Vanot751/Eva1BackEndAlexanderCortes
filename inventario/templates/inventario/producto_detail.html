@@ -3,6 +3,7 @@
 {% block header %}Detalle de producto{% endblock %}
 {% block eyebrow %}Inventario{% endblock %}
 {% block content %}
+{% comment %}Muestra el registro enviado como object por producto_detail y ofrece edición o eliminación.{% endcomment %}
 <a href="{% url 'producto_list' %}" class="mb-6 inline-block text-sm font-bold text-moss hover:text-ink">← Volver al inventario</a>
 <section class="grid gap-6 lg:grid-cols-[1.4fr_.8fr]">
 	<div class="rounded-3xl bg-ink p-7 text-white sm:p-10"><span class="rounded-full bg-lime px-3 py-1 text-xs font-bold uppercase tracking-widest text-ink">Producto activo</span><h2 class="mt-8 font-display text-5xl leading-tight">{{ object.nombre }}</h2><p class="mt-4 max-w-xl leading-7 text-slate-300">{{ object.descripcion|default:'Sin descripción registrada para este producto.' }}</p><div class="mt-10 flex flex-wrap gap-3"><a href="{% url 'producto_update' object.pk %}" class="rounded-xl bg-lime px-5 py-3 text-sm font-bold text-ink hover:bg-white">Editar producto</a><a href="{% url 'producto_delete' object.pk %}" class="rounded-xl border border-white/20 px-5 py-3 text-sm font-bold text-white hover:bg-white/10">Eliminar</a></div></div>
