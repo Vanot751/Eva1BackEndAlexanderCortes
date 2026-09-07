@@ -9,8 +9,8 @@
 <form method="post" class="grid gap-6 lg:grid-cols-[1fr_1.25fr]">
     {% csrf_token %}
     {{ form.non_field_errors }}
-    <fieldset class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200/70 sm:p-8">
-        <legend class="mb-6 font-display text-2xl text-ink">Datos del cliente</legend>
+    <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200/70 sm:p-8">
+        <h3 class="mb-6 font-display text-2xl text-ink">Datos del cliente</h3>
         <div class="space-y-5"><div>{{ form.cliente_rut.label_tag }}{{ form.cliente_rut }}{{ form.cliente_rut.errors }}<p class="mt-2 text-xs text-slate-400">Formato: 12.345.678-5</p></div><label class="flex items-center gap-3 !mb-0 rounded-xl bg-paper p-4 text-sm font-bold text-ink">{{ form.es_habitual }}<span>{{ form.es_habitual.label }}</span></label></div>
         <div id="datos_habitual" class="mt-5 space-y-5 border-t border-slate-100 pt-5">
             <p class="text-xs font-bold uppercase tracking-[.15em] text-moss">Datos para futuras visitas</p>
@@ -18,9 +18,10 @@
             <div>{{ form.correo.label_tag }}{{ form.correo }}{{ form.correo.errors }}</div>
             <div>{{ form.telefono.label_tag }}{{ form.telefono }}{{ form.telefono.errors }}</div>
         </div>
-    </fieldset>
-    <fieldset class="venta-panel rounded-3xl bg-ink p-6 text-white shadow-sm sm:p-8">
-        <legend class="mb-2 w-full max-w-full break-words font-display text-xl text-white sm:text-2xl">Productos de la venta</legend><p class="mb-6 text-sm leading-6 text-slate-200">Agrega todos los productos que necesites en esta operación.</p>
+    </div>
+    <div class="venta-panel rounded-3xl bg-ink p-6 text-white shadow-sm sm:p-8">
+        <h3 class="mb-2 font-display text-xl text-white sm:text-2xl">Productos de la venta</h3>
+        <p class="mb-6 text-sm leading-6 text-slate-200">Agrega todos los productos que necesites en esta operación.</p>
         <div id="lineas-productos">
         {% for linea in form.lineas %}
             <div class="producto-linea mb-4 grid min-w-0 grid-cols-1 items-end gap-3 rounded-2xl border border-white/15 bg-white/10 p-4 sm:grid-cols-[minmax(0,1fr)_7rem]" data-index="{{ linea.index }}">
@@ -31,7 +32,7 @@
         </div>
         <button type="button" id="agregar-producto" class="mb-2 rounded-xl border border-lime/70 px-4 py-2 text-sm font-bold text-lime transition hover:bg-lime hover:text-ink">+ Agregar otro producto</button>
         <button type="submit" class="mt-3 w-full rounded-xl bg-lime px-6 py-3.5 text-sm font-bold text-ink transition hover:bg-white">Registrar venta →</button>
-    </fieldset>
+    </div>
 </form>
 <script>
     // Los datos adicionales solo son visibles cuando el comprador elige ser habitual.
