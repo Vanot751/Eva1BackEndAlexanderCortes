@@ -3,12 +3,23 @@ from django.db import models
 # Los modelos representan las entidades persistentes del inventario y del proceso
 # de venta. Django convierte cada clase en una tabla y cada atributo en una columna.
 class Producto(models.Model): 
-    # El código identifica el producto de forma única para evitar duplicados.
-    codigo = models.CharField(max_length=32, unique=True)
+    # El código identifica el producto de forma única y se asigna automáticamente si no se provee.
+    codigo = models.CharField(max_length=32, unique=True, blank=True)
     nombre = models.CharField(max_length=64) 
     precio = models.IntegerField(default=0) 
     descripcion = models.CharField(max_length=500, null=True, blank=True)
     stock =  models.IntegerField(default=0)
+
+    def save(self, *args, **kwargs):
+        if not self.codigo:
+            ultimo = Producto.objects.order_by('-id').first()
+            siguiente_id = (ultimo.id + 1) if (ultimo and ultimo.id) else 1
+            codigo_candidato = f'PROD-{siguiente_id:04d}'
+            while Producto.objects.filter(codigo=codigo_candidato).exists():
+                siguiente_id += 1
+                codigo_candidato = f'PROD-{siguiente_id:04d}'
+            self.codigo = codigo_candidato
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.nombre} ({self.codigo})'

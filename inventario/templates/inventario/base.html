@@ -80,7 +80,7 @@
                     <p class="text-xs font-bold uppercase tracking-[.18em] text-moss">{% block eyebrow %}Operaciones{% endblock %}</p>
                     <h1 class="mt-1 font-display text-2xl text-ink">{% block header %}Mi Tienda{% endblock %}</h1>
                 </div>
-                <a href="{% url 'producto_create' %}" class="hidden rounded-xl bg-ink px-4 py-2.5 text-sm font-bold text-white transition hover:bg-moss sm:inline-flex">+ Producto</a>
+                {% block header_actions %}{% endblock %}
             </header>
             <main class="mx-auto max-w-7xl px-5 py-7 lg:px-10 lg:py-10">
         {% comment %}messages muestra confirmaciones y errores enviados por las vistas después de cada operación.{% endcomment %}

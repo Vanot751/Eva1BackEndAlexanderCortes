@@ -7,9 +7,8 @@ from .models import Cliente, Venta, DetalleVenta, Producto
 class ProductoForm(forms.ModelForm):
     class Meta:
         model = Producto
-        fields = ['codigo', 'nombre', 'precio', 'descripcion', 'stock']
+        fields = ['nombre', 'precio', 'descripcion', 'stock']
         labels = {
-            'codigo': 'Código',
             'nombre': 'Nombre del producto',
             'precio': 'Precio de venta',
             'descripcion': 'Descripción',

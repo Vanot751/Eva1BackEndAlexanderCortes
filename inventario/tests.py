@@ -36,6 +36,20 @@ class InventarioTests(TestCase):
 		self.assertRedirects(response, reverse('producto_list'))
 		self.assertEqual(Producto.objects.get(codigo='A-001').stock, 10)
 
+	def test_crea_producto_codigo_automatico(self):
+		# Verifica que al registrar sin código se asigne automáticamente (ej: PROD-0001).
+		response = self.client.post(reverse('producto_create'), {
+			'nombre': 'Jugo de Naranja',
+			'precio': 1500,
+			'descripcion': 'Jugo natural 1L',
+			'stock': 15,
+		})
+
+		self.assertRedirects(response, reverse('producto_list'))
+		producto = Producto.objects.get(nombre='Jugo de Naranja')
+		self.assertEqual(producto.stock, 15)
+		self.assertTrue(producto.codigo.startswith('PROD-'))
+
 	def test_registra_venta_y_descuenta_stock(self):
 		# Comprueba que vender crea los registros correctos y reduce las existencias.
 		producto = Producto.objects.create(codigo='A-002', nombre='Leche', precio=1200, stock=5)

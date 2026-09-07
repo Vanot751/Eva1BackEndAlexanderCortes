@@ -34,7 +34,10 @@ def producto_create(request):
     if request.method == 'POST':
         form = ProductoForm(request.POST)
         if form.is_valid():
-            form.save()
+            producto = form.save(commit=False)
+            if 'codigo' in request.POST and request.POST['codigo'].strip():
+                producto.codigo = request.POST['codigo'].strip()
+            producto.save()
             return redirect('producto_list')
     else:
         form = ProductoForm()
