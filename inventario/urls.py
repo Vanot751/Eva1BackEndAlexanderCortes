@@ -4,6 +4,9 @@ from . import views
 # Estas rutas asignan cada URL pública a una vista y le dan un nombre reutilizable
 # por las redirecciones y los enlaces de las plantillas.
 urlpatterns = [
+
+    path('', views.producto_list, name='home'),
+
     # Productos
     path('productos/', views.producto_list, name='producto_list'),
     path('productos/nuevo/', views.producto_create, name='producto_create'),
