@@ -9,3 +9,5 @@ python manage.py migrate
 **python manage.py runserver**(Ahora no se usa)
 
 python manage.py createsuperuser
+
+python manage.py collectstatic
