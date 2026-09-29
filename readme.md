@@ -11,3 +11,5 @@ python manage.py migrate
 python manage.py createsuperuser
 
 python manage.py collectstatic
+
+**winget install Microsoft.VisualStudioCode --force** (Se usa en los ordenadores de Inacap desde la CMD para actualizar la version de VSCode)
