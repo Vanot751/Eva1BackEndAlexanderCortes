@@ -27,23 +27,6 @@ def producto_detail(request, pk):
     return render(request, 'inventario/producto_detail.html', {'object': producto})
 
 
-# CREATE
-@csrf_protect
-def producto_create(request):
-    # GET muestra el formulario vacío; POST valida y persiste el producto mediante ModelForm.
-    if request.method == 'POST':
-        form = ProductoForm(request.POST)
-        if form.is_valid():
-            producto = form.save(commit=False)
-            if 'codigo' in request.POST and request.POST['codigo'].strip():
-                producto.codigo = request.POST['codigo'].strip()
-            producto.save()
-            return redirect('producto_list')
-    else:
-        form = ProductoForm()
-    return render(request, 'inventario/producto_form.html', {'form': form})
-
-
 # UPDATE
 @csrf_protect
 def producto_update(request, pk):

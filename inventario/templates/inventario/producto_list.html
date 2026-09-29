@@ -9,7 +9,6 @@
         <p class="mb-2 text-sm text-slate-500">Vista general de tus productos disponibles</p>
         <h2 class="font-display text-4xl leading-tight text-ink">El pulso de tu tienda.</h2>
     </div>
-    <a href="{% url 'producto_create' %}" class="inline-flex items-center justify-center rounded-xl bg-moss px-5 py-3 text-sm font-bold text-white shadow-lg shadow-moss/15 transition hover:-translate-y-0.5 hover:bg-ink">+ Registrar producto</a>
 </section>
 <section class="mb-8 grid gap-4 sm:grid-cols-3">
     {% comment %}Las tarjetas resumen el catálogo y ofrecen accesos rápidos al flujo de venta.{% endcomment %}
@@ -27,7 +26,7 @@
             {% for p in object_list %}
                 <tr class="transition hover:bg-paper"><td class="px-6 py-4"><a href="{% url 'producto_detail' p.pk %}" class="font-bold text-ink hover:text-moss">{{ p.nombre }}</a></td><td class="px-6 py-4 font-mono text-xs text-slate-500">{{ p.codigo }}</td><td class="px-6 py-4 font-bold text-ink">${{ p.precio }}</td><td class="px-6 py-4"><span class="rounded-full px-2.5 py-1 text-xs font-bold {% if p.stock == 0 %}bg-red-100 text-red-700{% elif p.stock < 5 %}bg-amber/30 text-amber-900{% else %}bg-lime text-moss{% endif %}">{{ p.stock }} unidades</span></td><td class="px-6 py-4 text-right"><a href="{% url 'producto_update' p.pk %}" class="font-bold text-moss hover:text-ink">Editar</a><span class="mx-2 text-slate-300">/</span><a href="{% url 'producto_delete' p.pk %}" class="font-bold text-red-600 hover:text-red-800">Eliminar</a></td></tr>
             {% empty %}
-                <tr><td colspan="5" class="px-6 py-14 text-center"><p class="font-display text-2xl text-ink">Aún no hay productos.</p><p class="mt-2 text-sm text-slate-500">Agrega el primero para comenzar a controlar tu inventario.</p></td></tr>
+                <tr><td colspan="5" class="px-6 py-14 text-center"><p class="font-display text-2xl text-ink">Aún no hay productos.</p><p class="mt-2 text-sm text-slate-500">Los productos se registran desde el panel de administración.</p></td></tr>
             {% endfor %}
             </tbody>
         </table>
