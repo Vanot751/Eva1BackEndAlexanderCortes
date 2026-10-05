@@ -37,7 +37,7 @@ class RangoStockFilter(SimpleListFilter):
 @admin.register(Producto)
 class ProductoAdmin(admin.ModelAdmin):
     list_display = ('codigo', 'nombre', 'descripcion', 'precio', 'stock')
-    list_editable = ('nombre', 'descripcion', 'precio')
+    list_editable = ('nombre', 'descripcion', 'precio', 'stock')
     search_fields = ('codigo', 'nombre')
     list_filter = (RangoStockFilter,)
     list_per_page = 25
@@ -49,6 +49,9 @@ class ProductoAdmin(admin.ModelAdmin):
             'fields': ('stock',)
         }),
     )
+
+    class Media:
+        js = ('inventario/js/confirm_guardar.js',)
 
     def save_model(self, request, obj, form, change):
         # Lógica al guardar: Ejemplo de auditoría o ajuste
