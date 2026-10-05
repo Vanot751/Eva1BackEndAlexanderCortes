@@ -17,6 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+# Branding del Admin
+admin.site.site_header = "Panel Interno — Mercado Menta"
+admin.site.site_title = "Admin Mercado Menta"
+admin.site.index_title = "Operaciones"
+
 # El proyecto delega las rutas de negocio a inventario y conserva /admin/ para Django.
 urlpatterns = [
     path('admin/', admin.site.urls),
