@@ -1,5 +1,4 @@
 from django.contrib.admin.sites import site
-from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
@@ -79,37 +78,3 @@ class InventarioTests(TestCase):
 		qs_alto = filtro_alto.queryset(None, Producto.objects.all())
 		self.assertTrue(qs_alto.filter(codigo='P-ALTO').exists())
 		self.assertFalse(qs_alto.filter(codigo='P-MEDIO').exists())
-
-	def test_admin_guarda_edicion_de_producto_desde_lista(self):
-		# Verifica la edición masiva mediante el formset estándar de list_editable.
-		usuario = get_user_model().objects.create_superuser(
-			username='admin', email='admin@example.com', password='segura-123'
-		)
-		self.client.force_login(usuario)
-		producto = Producto.objects.create(
-			codigo='EDIT-001', nombre='Nombre original', precio=100, stock=2,
-			descripcion='Descripción original'
-		)
-
-		response = self.client.post(
-			reverse('admin:inventario_producto_changelist'),
-			{
-				'form-TOTAL_FORMS': '1',
-				'form-INITIAL_FORMS': '1',
-				'form-MIN_NUM_FORMS': '0',
-				'form-MAX_NUM_FORMS': '1000',
-				'form-0-id': str(producto.pk),
-				'form-0-nombre': 'Nombre actualizado',
-				'form-0-descripcion': 'Descripción actualizada',
-				'form-0-precio': '250',
-				'form-0-stock': '8',
-				'_save': 'Guardar',
-			},
-		)
-
-		self.assertEqual(response.status_code, 302)
-		producto.refresh_from_db()
-		self.assertEqual(producto.nombre, 'Nombre actualizado')
-		self.assertEqual(producto.descripcion, 'Descripción actualizada')
-		self.assertEqual(producto.precio, 250)
-		self.assertEqual(producto.stock, 8)

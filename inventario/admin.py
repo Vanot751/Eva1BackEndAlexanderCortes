@@ -37,12 +37,9 @@ class RangoStockFilter(SimpleListFilter):
 @admin.register(Producto)
 class ProductoAdmin(admin.ModelAdmin):
     list_display = ('codigo', 'nombre', 'descripcion', 'precio', 'stock')
-    list_editable = ('nombre', 'descripcion', 'precio', 'stock')
-    list_display_links = ('codigo',)
     search_fields = ('codigo', 'nombre')
     list_filter = (RangoStockFilter,)
     list_per_page = 25
-    save_on_top = True
     fieldsets = (
         ('Datos básicos', {
             'fields': ('codigo', 'nombre', 'descripcion', 'precio')
@@ -51,9 +48,6 @@ class ProductoAdmin(admin.ModelAdmin):
             'fields': ('stock',)
         }),
     )
-
-    class Media:
-        js = ('inventario/js/confirm_guardar.js',)
 
     def has_delete_permission(self, request, obj=None):
         # Permisos: limita acciones según rol (solo superusuarios pueden eliminar productos)
