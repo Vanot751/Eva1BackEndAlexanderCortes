@@ -36,7 +36,8 @@ class RangoStockFilter(SimpleListFilter):
 
 @admin.register(Producto)
 class ProductoAdmin(admin.ModelAdmin):
-    list_display = ('codigo', 'nombre', 'precio', 'stock')
+    list_display = ('codigo', 'nombre', 'descripcion', 'precio', 'stock')
+    list_editable = ('nombre', 'descripcion', 'precio')
     search_fields = ('codigo', 'nombre')
     list_filter = (RangoStockFilter,)
     list_per_page = 25

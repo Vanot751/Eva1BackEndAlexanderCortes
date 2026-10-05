@@ -41,6 +41,8 @@ class VentaForm(forms.Form):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        productos_disponibles = Producto.objects.filter(stock__gt=0)
+        self.productos_disponibles = productos_disponibles.count()
         indices = {1}
         data = kwargs.get('data')
         if data:
@@ -52,7 +54,7 @@ class VentaForm(forms.Form):
         self.lineas = []
         for index in sorted(indices):
             producto = forms.ModelChoiceField(
-                queryset=Producto.objects.filter(stock__gt=0),
+                queryset=productos_disponibles,
                 label='Producto',
                 required=False,
             )
@@ -66,9 +68,10 @@ class VentaForm(forms.Form):
             })
 
     def clean(self):
-        # La validación cruzada evita líneas incompletas antes de llegar a la vista:
-        # si existe producto debe existir cantidad y viceversa.
+        # La validación cruzada evita líneas incompletas y productos repetidos
+        # antes de llegar a la vista.
         cleaned_data = super().clean()
+        productos_seleccionados = []
         for linea in self.lineas:
             index = linea['index']
             producto = cleaned_data.get(f'producto_{index}')
@@ -77,4 +80,16 @@ class VentaForm(forms.Form):
                 self.add_error(f'cantidad_{index}', 'Indique la cantidad.')
             if cantidad and not producto:
                 self.add_error(f'producto_{index}', 'Seleccione un producto.')
+            if producto:
+                if producto.pk in productos_seleccionados:
+                    self.add_error(
+                        f'producto_{index}',
+                        'Este producto ya fue agregado a la venta.',
+                    )
+                else:
+                    productos_seleccionados.append(producto.pk)
+        if len(productos_seleccionados) > self.productos_disponibles:
+            raise forms.ValidationError(
+                'La venta no puede contener más productos que los disponibles.'
+            )
         return cleaned_data
