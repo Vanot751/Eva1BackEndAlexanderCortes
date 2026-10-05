@@ -11,11 +11,11 @@
             theme: {
                 extend: {
                     colors: {
-                        ink: '#0f172a',
-                        moss: '#6366f1',
-                        lime: '#38bdf8',
-                        paper: '#f8fafc',
-                        amber: '#fde047'
+                        ink: '#022c22',
+                        moss: '#10b981',
+                        lime: '#6ee7b7',
+                        paper: '#f0fdf4',
+                        amber: '#fef08a'
                     },
                     fontFamily: {
                         display: ['Georgia', 'serif'],
@@ -26,11 +26,11 @@
         }
     </script>
     <style>
-        body { background: #f8fafc; color: #0f172a; }
-        input, select, textarea { width: 100%; border: 1px solid #cbd5e1; border-radius: .75rem; background: #fff; padding: .7rem .85rem; color: #0f172a; outline: none; transition: border-color .2s, box-shadow .2s; }
-        input:focus, select:focus, textarea:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99, 102, 241, .2); }
-        input[type="checkbox"] { width: auto; accent-color: #6366f1; }
-        label { display: block; margin-bottom: .35rem; color: #475569; font-size: .85rem; font-weight: 700; }
+        body { background: #f0fdfa; color: #022c22; }
+        input, select, textarea { width: 100%; border: 1px solid #a7f3d0; border-radius: .75rem; background: #fff; padding: .7rem .85rem; color: #022c22; outline: none; transition: border-color .2s, box-shadow .2s; }
+        input:focus, select:focus, textarea:focus { border-color: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, .2); }
+        input[type="checkbox"] { width: auto; accent-color: #10b981; }
+        label { display: block; margin-bottom: .35rem; color: #065f46; font-size: .85rem; font-weight: 700; }
         .venta-panel legend, .venta-panel h3 { display: block; max-width: 100%; overflow-wrap: anywhere; color: #fff; line-height: 1.2; }
         .venta-panel label { color: #f1f5f9; }
         .venta-panel select, .venta-panel input:not([type="checkbox"]) { background: #fff; color: #0f172a; }
@@ -39,13 +39,13 @@
         ul.errorlist { margin: .35rem 0; color: #e11d48; font-size: .8rem; list-style: none; padding: 0; }
     </style>
 </head>
-<body class="min-h-screen font-sans bg-slate-50 text-slate-900 selection:bg-indigo-500 selection:text-white">
+<body class="min-h-screen font-sans bg-teal-50/50 text-emerald-950 selection:bg-emerald-500 selection:text-white">
     {% comment %}El layout divide la aplicación en navegación lateral y contenido principal responsive.{% endcomment %}
     <div class="min-h-screen lg:flex">
-        <aside class="flex w-full flex-col bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-950 px-5 py-5 text-white lg:min-h-screen lg:w-72 lg:px-7 lg:py-8 shadow-xl z-10">
+        <aside class="flex w-full flex-col bg-gradient-to-br from-teal-900 via-emerald-900 to-teal-950 px-5 py-5 text-white lg:min-h-screen lg:w-72 lg:px-7 lg:py-8 shadow-xl z-10">
             <div class="flex items-center justify-between lg:block">
                 <a href="{% url 'producto_list' %}" class="flex items-center gap-3">
-                    <span class="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-tr from-cyan-400 to-cyan-200 text-xl font-bold text-indigo-950 shadow-lg">M</span>
+                    <span class="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-tr from-emerald-400 to-teal-300 text-xl font-bold text-teal-950 shadow-lg">M</span>
                     <span>
                         <span class="block font-display text-2xl leading-none">Mercado Menta</span>
                         <span class="mt-1 block text-xs uppercase tracking-[.22em] text-slate-300">control de venta</span>
