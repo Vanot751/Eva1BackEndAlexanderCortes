@@ -38,9 +38,11 @@ class RangoStockFilter(SimpleListFilter):
 class ProductoAdmin(admin.ModelAdmin):
     list_display = ('codigo', 'nombre', 'descripcion', 'precio', 'stock')
     list_editable = ('nombre', 'descripcion', 'precio', 'stock')
+    list_display_links = ('codigo',)
     search_fields = ('codigo', 'nombre')
     list_filter = (RangoStockFilter,)
     list_per_page = 25
+    save_on_top = True
     fieldsets = (
         ('Datos básicos', {
             'fields': ('codigo', 'nombre', 'descripcion', 'precio')
@@ -53,10 +55,6 @@ class ProductoAdmin(admin.ModelAdmin):
     class Media:
         js = ('inventario/js/confirm_guardar.js',)
 
-    def save_model(self, request, obj, form, change):
-        # Lógica al guardar: Ejemplo de auditoría o ajuste
-        super().save_model(request, obj, form, change)
-        
     def has_delete_permission(self, request, obj=None):
         # Permisos: limita acciones según rol (solo superusuarios pueden eliminar productos)
         return request.user.is_superuser
