@@ -36,7 +36,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'eva1-back-end-alexander-cortes.vercel.app',
-    'eva1-back-end-alexander-cortes-pr9bhvr4z-vanot751s-projects.vercel.app',
+    'eva1-back-end-alexander-cortes-bsljuierz-vanot751s-projects.vercel.app',
     'localhost',
     '127.0.0.1'
 ]
