@@ -35,7 +35,6 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-+0-u+sesk-tu1oqw7s9l+#w)34
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'eva1-back-end-alexander-cortes.vercel.app',
     'eva1-back-end-alexander-cortes-bsljuierz-vanot751s-projects.vercel.app',
     'localhost',
     '127.0.0.1'
