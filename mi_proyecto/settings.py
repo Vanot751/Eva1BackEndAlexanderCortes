@@ -69,7 +69,10 @@ MIDDLEWARE = [
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-    )
+    ),
+    'default_permission_classes': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
 }
 
 ROOT_URLCONF = 'mi_proyecto.urls'
