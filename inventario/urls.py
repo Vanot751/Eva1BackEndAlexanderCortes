@@ -16,8 +16,6 @@ class ProductoViewSet(viewsets.ModelViewSet):
 router = routers.DefaultRouter()
 router.register(r'productos', ProductoViewSet)
 
-app_name = 'inventario'
-
 # Estas rutas asignan cada URL pública a una vista y le dan un nombre reutilizable
 # por las redirecciones y los enlaces de las plantillas.
 urlpatterns = [
