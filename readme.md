@@ -4,6 +4,9 @@ Aplicación web desarrollada con **Django** para administrar el inventario de un
 sus clientes y el registro de ventas. El proyecto utiliza PostgreSQL como base de datos
 y cuenta con el panel administrativo de Django para las tareas de gestión.
 
+**Actualizar vscode desde cmd: winget upgrade --id Microsoft.VisualStudioCode
+**
+
 ## Funcionalidades principales
 
 - Listar, consultar, editar y eliminar productos.
